@@ -4,12 +4,57 @@ var currentDate = moment().format('MMMM Do YYYY, h:mm a');
 $("#currentDay").html(currentDate);
 
 // jQuery targetting that will listen for the click after user has saved their input on text area
-$(".saveBtn").on("click", function() {
-    // need to target what is inputted 
+
+function time (hour) {
+    const block = hour < 8 ? "PM":"AM"
+    
+    var saveButton = document.createElement("button");
+    var textArea = document.createElement("textarea");
+    var divEl1 = document.createElement("div");
+    var divEl2 = document.createElement("div")
+    $(divEl1).attr("id", `${hour}${block}`);
+    
+    $(divEl1).addClass("row time-block");
+    $(textArea).addClass("col-md-10");
+    $(saveButton).addClass("col-md-1 saveBtn");
+    $(divEl2).addClass("col-md-1 hour");
+    
+    $(divEl2).text(`${hour}:00${block}`);
+    
+    $(divEl1).append(divEl2);
+    $(divEl1).append(textArea);
+    $(divEl1).append(saveButton);
+    
+    
+    $(saveButton).on("click", function() {
+        
+    
+        localStorage.setItem();
+    });
+
+    return divEl1;
 }
 
+function generateTimeBlock () {
+    var dom = $("#time-container");
+    
 
+    for (var i = 8; i !== 6; i++) {
+        if (i == 13) {
+            i = 1
+        }
+        $(dom).append(time(i));
+    }
+    
+}
 
+generateTimeBlock();
+
+// <div id="8am" class="row time-block">
+// <div class="col-md-1 hour">8:00 AM</div>
+// <textarea class="col-md-10"></textarea>
+// <button class="col-md-1 saveBtn"></button>
+// </div>
 
 
 
