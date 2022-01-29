@@ -3,41 +3,65 @@ var currentDate = moment().format('MMMM Do YYYY, h:mm a');
 // Targetting with a 'p' element with id of #currentDay
 $("#currentDay").html(currentDate);
 
-// jQuery targetting that will listen for the click after user has saved their input on text area
+
 
 function time (hour) {
     const block = hour < 8 ? "PM":"AM"
-    
+    const timeNow = moment().hour();
     var saveButton = document.createElement("button");
-    var textArea = document.createElement("textarea");
+    var event = document.createElement("textarea");
     var divEl1 = document.createElement("div");
     var divEl2 = document.createElement("div")
+
     $(divEl1).attr("id", `${hour}${block}`);
-    
+
     $(divEl1).addClass("row time-block");
-    $(textArea).addClass("col-md-10");
-    $(saveButton).addClass("col-md-1 saveBtn");
+    $(event).addClass("col-md-10 descripton");
+    $(saveButton).addClass("col-md-1 saveBtn btn");
     $(divEl2).addClass("col-md-1 hour");
-    
+
     $(divEl2).text(`${hour}:00${block}`);
     
     $(divEl1).append(divEl2);
-    $(divEl1).append(textArea);
+    $(divEl1).append(event);
     $(divEl1).append(saveButton);
-    
-    
+
+    // jQuery targetting that will listen for the click after user has saved their input on text area
     $(saveButton).on("click", function() {
-        
-    
-        localStorage.setItem();
+        var textValue = $(saveButton).siblings(".description").val();
+        var time = $(saveButton).parent().attr("id");
+        console.log(textValue)
+    // Save text in local storage
+        localStorage.setItem(time, textValue);
     });
+
+    $(".time-block").each(function() {
+        let blockTime = parseInt($(this).attr("id").split("hour")[1]);
+        
+        if (blockTime < timeNow) {
+            $(this).removeClass("future");
+            $(this).removeClass("present");
+            $(this).addClass("past");
+        }
+        else if (blockTime === timeNow) {
+            $(this).removeClass("past");
+            $(this).removeClass("future");
+            $(this).addClass("present");
+        }
+        else {
+            $(this).removeClass("present");
+            $(this).removeClass("past");
+            $(this).addClass("future");
+        
+        }
+    })
 
     return divEl1;
 }
 
+
 function generateTimeBlock () {
     var dom = $("#time-container");
-    
 
     for (var i = 8; i !== 6; i++) {
         if (i == 13) {
@@ -46,7 +70,7 @@ function generateTimeBlock () {
         $(dom).append(time(i));
     }
     
-}
+};
 
 generateTimeBlock();
 
@@ -55,12 +79,6 @@ generateTimeBlock();
 // <textarea class="col-md-10"></textarea>
 // <button class="col-md-1 saveBtn"></button>
 // </div>
-
-
-
-
-
-
 
 // DONE
 // 1. Display the current date at the top of the calendar
