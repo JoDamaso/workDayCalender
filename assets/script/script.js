@@ -3,83 +3,86 @@ var currentDate = moment().format('MMMM Do YYYY, h:mm a');
 // Targetting with a 'p' element with id of #currentDay
 $("#currentDay").html(currentDate);
 
+const presentTime = parseInt(moment().hour());
+console.log(presentTime);
 
-
-function time (hour) {
-    const block = hour < 8 ? "PM":"AM"
-    const timeNow = moment().hour();
-    var saveButton = document.createElement("button");
-    var event = document.createElement("textarea");
-    var divEl1 = document.createElement("div");
-    var divEl2 = document.createElement("div")
-
-    $(divEl1).attr("id", `${hour}${block}`);
-
-    $(divEl1).addClass("row time-block");
-    $(event).addClass("col-md-10 descripton");
-    $(saveButton).addClass("col-md-1 saveBtn btn");
-    $(divEl2).addClass("col-md-1 hour");
-
-    $(divEl2).text(`${hour}:00${block}`);
-    
-    $(divEl1).append(divEl2);
-    $(divEl1).append(event);
-    $(divEl1).append(saveButton);
-
+$(document).ready(function() {
     // jQuery targetting that will listen for the click after user has saved their input on text area
-    $(saveButton).on("click", function() {
-        var textValue = $(saveButton).siblings(".description").val();
-        var time = $(saveButton).parent().attr("id");
+    $(".btn").on("click", function() {
+        var time = $(this).parent().attr("id");
+        var textValue = $(this).siblings(".description").val();
         console.log(textValue)
     // Save text in local storage
         localStorage.setItem(time, textValue);
     });
 
-    $(".time-block").each(function() {
-        let blockTime = parseInt($(this).attr("id").split("hour")[1]);
-        
-        if (blockTime < timeNow) {
-            $(this).removeClass("future");
-            $(this).removeClass("present");
+    $("#8am .description").val(localStorage.getItem("8am"));
+    $("#9am .description").val(localStorage.getItem("9am"));
+    $("#10am .description").val(localStorage.getItem("10am"));
+    $("#11am .description").val(localStorage.getItem("11am"));
+    $("#12pm .description").val(localStorage.getItem("12pm"));
+    $("#1pm .description").val(localStorage.getItem("1pm"));
+    $("#2pm .description").val(localStorage.getItem("2pm"));
+    $("#3pm .description").val(localStorage.getItem("3pm"));
+    $("#4pm .description").val(localStorage.getItem("4pm"));
+    $("#5pm .description").val(localStorage.getItem("5pm"));
+
+    $("textarea").each(function() {
+        var textInput = parseInt($(this));
+
+        if (textInput < presentTime) {
             $(this).addClass("past");
-        }
-        else if (blockTime === timeNow) {
-            $(this).removeClass("past");
-            $(this).removeClass("future");
+        } 
+        if (textInput === presentTime) {
             $(this).addClass("present");
-        }
-        else {
-            $(this).removeClass("present");
-            $(this).removeClass("past");
+        } 
+        if (textInput > presentTime) {
             $(this).addClass("future");
-        
         }
     })
-
-    return divEl1;
-}
+});
 
 
-function generateTimeBlock () {
-    var dom = $("#time-container");
 
-    for (var i = 8; i !== 6; i++) {
-        if (i == 13) {
-            i = 1
-        }
-        $(dom).append(time(i));
-    }
+
+
+// function time (hour) {
+//     const block = hour < 8 ? "PM":"AM"
+
+//     var saveButton = document.createElement("button");
+//     var event = document.createElement("textarea");
+//     var divEl1 = document.createElement("div");
+//     var divEl2 = document.createElement("div");
+
+//     $(divEl1).attr("id", `${hour}${block}`);
+
+//     $(divEl1).addClass("row time-block");
+//     $(event).addClass("col-md-10 descripton");
+//     $(saveButton).addClass("col-md-1 saveBtn btn");
+//     $(divEl2).addClass("col-md-1 hour");
+
+//     $(divEl2).text(`${hour}:00${block}`);
     
-};
+//     $(divEl1).append(divEl2);
+//     $(divEl1).append(event);
+//     $(divEl1).append(saveButton);
+//     return divEl1;
+// };
 
-generateTimeBlock();
 
-// <div id="8am" class="row time-block">
-// <div class="col-md-1 hour">8:00 AM</div>
-// <textarea class="col-md-10"></textarea>
-// <button class="col-md-1 saveBtn"></button>
-// </div>
+// function generateTimeBlock () {
+//     var dom = $("#time-container");
 
+//     for (var i = 8; i !== 6; i++) {
+//         if (i == 13) {
+//             i = 1
+//         }
+//         $(dom).append(time(i));
+//     }
+    
+// };
+
+// generateTimeBlock();
 // DONE
 // 1. Display the current date at the top of the calendar
 // 	-google: how to get the current date in javascript
